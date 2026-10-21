@@ -13,14 +13,18 @@
         "phpstan/phpstan": "^2.1"
     },
     "autoload": {
-        "psr-4": { "App\\": "src/" }
+        "psr-4": {
+            "App\\": "src/"
+        }
     },
     "autoload-dev": {
-        "psr-4": { "App\\Tests\\": "tests/" }
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-create-project-cmd": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@php bin/setup"
         ],
         "test": "phpunit",
         "stan": "phpstan analyse",
@@ -28,7 +32,9 @@
         "compile": "@php bin/console keel:compile",
         "preload": "@php bin/console keel:preload"
     },
-    "config": { "sort-packages": true },
+    "config": {
+        "sort-packages": true
+    },
     "minimum-stability": "stable",
     "prefer-stable": true
 }

@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+// Runs after "composer create-project": creates .env from .env.example and fills APP_SECRET.
+$root = dirname(__DIR__);
+$env = $root . '/.env';
+if (!file_exists($env)) {
+    copy($root . '/.env.example', $env);
+}
+$content = (string) file_get_contents($env);
+if (preg_match('/^APP_SECRET=\s*$/m', $content) === 1) {
+    $content = (string) preg_replace('/^APP_SECRET=\s*$/m', 'APP_SECRET=' . bin2hex(random_bytes(32)), $content);
+    file_put_contents($env, $content);
+    echo "Generated APP_SECRET in .env\n";
+}
