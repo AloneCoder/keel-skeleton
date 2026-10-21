@@ -1,0 +1,15 @@
+# FrankenPHP worker mode: frankenphp run
+{
+	frankenphp {
+		worker {
+			file ./public/index.php
+			env MAX_REQUESTS 1000
+		}
+	}
+}
+
+:8080 {
+	root * public
+	encode zstd gzip
+	php_server
+}
