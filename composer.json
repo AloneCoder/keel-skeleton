@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=8.4",
-        "keel/framework": "^0.2",
+        "keel/framework": "^0.3",
         "symfony/console": "^7.3|^8.0"
     },
     "require-dev": {
