@@ -5,9 +5,15 @@ Project template for the [Keel](https://github.com/AloneCoder/keel) micro-framew
 ```bash
 composer create-project keel/skeleton my-app
 cd my-app
-composer serve            # http://127.0.0.1:8080
+composer serve            # http://127.0.0.1:8080 (php -S)
+composer serve:worker     # FrankenPHP worker mode with --watch, needs the frankenphp binary
 composer test
 ```
+
+Out of the box: `GET /` and `POST /subscribe` (validated DTO, rate limited), `GET /me` behind
+`#[Auth]` (bearer token from `API_TOKEN` in `.env`, see `src/Auth/ApiTokens.php`), `/health` and
+`/health/live`, `/metrics` (Prometheus), `/openapi.json` and `/docs` (OpenAPI 3.1 derived from the
+code). Middleware and endpoints are listed in `config/http.php`; remove what you do not need.
 
 Layout: `config/` (config objects), `src/` (controllers, services, listeners, commands found by
 discovery), `public/index.php` (one front controller for php-fpm, FrankenPHP worker mode and
@@ -21,7 +27,9 @@ the Dockerfile, which does it at build time.
 ## По-русски
 
 Шаблон проекта на Keel. `composer create-project keel/skeleton my-app`, затем `composer serve`
-и `composer test`. Конфиги в `config/`, код в `src/` (находится discovery), один фронт-контроллер
+(или `composer serve:worker` для FrankenPHP worker mode) и `composer test`. Из коробки: `GET /`,
+`POST /subscribe` с валидацией и лимитом, `GET /me` под `#[Auth]` (bearer-токен из `API_TOKEN`
+в `.env`), `/health`, `/metrics`, `/openapi.json` и `/docs`; состав — в `config/http.php`. Конфиги в `config/`, код в `src/` (находится discovery), один фронт-контроллер
 `public/index.php` для php-fpm, FrankenPHP и RoadRunner, `bin/console` с командами `keel:*`,
 тесты на `TestClient`, Dockerfile с FrankenPHP worker mode, скомпилированными кэшами и preload.
 В prod после деплоя выполняйте `bin/console keel:compile`.

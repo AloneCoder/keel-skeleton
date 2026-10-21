@@ -15,7 +15,8 @@ final class HomeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->client = TestClient::forApp(App::boot(dirname(__DIR__), new Env(['APP_ENV' => 'test', 'APP_DEBUG' => '1'])));
+        $env = new Env(['APP_ENV' => 'test', 'APP_DEBUG' => '1', 'API_TOKEN' => 'test-token']);
+        $this->client = TestClient::forApp(App::boot(dirname(__DIR__), $env));
     }
 
     public function testHome(): void
@@ -27,9 +28,23 @@ final class HomeTest extends TestCase
     {
         $this->client->json('POST', '/subscribe', ['name' => 'Ann', 'email' => 'ann@example.test'])
             ->assertStatus(201)
-            ->assertJsonPath('name', 'Ann');
+            ->assertJsonPath('name', 'Ann')
+            ->assertHeader('RateLimit-Limit', '10');
 
         $this->client->json('POST', '/subscribe', ['name' => '', 'email' => 'nope'])
             ->assertProblem(400, 'Invalid request data', ['name: must not be blank', 'email: must be a valid email address']);
+    }
+
+    public function testProtectedRoute(): void
+    {
+        $this->client->get('/me')->assertProblem(401)->assertHeader('WWW-Authenticate', 'Bearer realm="api"');
+        $this->client->get('/me', ['Authorization' => 'Bearer test-token'])->assertOk()->assertJson(['id' => 'api']);
+    }
+
+    public function testOperationalEndpoints(): void
+    {
+        $this->client->get('/health')->assertOk()->assertJsonPath('status', 'up');
+        $this->client->get('/openapi.json')->assertOk()->assertJsonPath('info.title', 'My API');
+        $this->client->get('/metrics')->assertOk()->assertBodyContains('http_requests_total');
     }
 }

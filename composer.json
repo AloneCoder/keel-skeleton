@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=8.4",
-        "keel/framework": "^1.0",
+        "keel/framework": "^1.1",
         "symfony/console": "^7.3|^8.0"
     },
     "require-dev": {
@@ -28,7 +28,9 @@
         ],
         "test": "phpunit",
         "stan": "phpstan analyse",
-        "serve": "@php -S 127.0.0.1:8080 -t public public/index.php",
+        "serve": "@php bin/console keel:serve",
+        "serve:worker": "@php bin/console keel:serve --watch",
+        "openapi": "@php bin/console keel:openapi --output=public/openapi.json",
         "compile": "@php bin/console keel:compile",
         "preload": "@php bin/console keel:preload"
     },
