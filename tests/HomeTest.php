@@ -35,6 +35,15 @@ final class HomeTest extends TestCase
             ->assertProblem(400, 'Invalid request data', ['name: must not be blank', 'email: must be a valid email address']);
     }
 
+    public function testTwigPage(): void
+    {
+        $this->client->get('/hello/%3CAnn%3E')
+            ->assertOk()
+            ->assertHeader('Content-Type', 'text/html; charset=utf-8')
+            ->assertBodyContains('<h1>Hello, &lt;Ann&gt;</h1>')
+            ->assertBodyContains('<title>Hello &lt;Ann&gt; · My API</title>');
+    }
+
     public function testProtectedRoute(): void
     {
         $this->client->get('/me')->assertProblem(401)->assertHeader('WWW-Authenticate', 'Bearer realm="api"');

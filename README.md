@@ -10,7 +10,8 @@ composer serve:worker     # FrankenPHP worker mode with --watch, needs the frank
 composer test
 ```
 
-Out of the box: `GET /` and `POST /subscribe` (validated DTO, rate limited), `GET /me` behind
+Out of the box: `GET /` and `POST /subscribe` (validated DTO, rate limited), `GET /hello/{name}`
+(a Twig page from `templates/`, see `config/views.php` and `config/services.php`), `GET /me` behind
 `#[Auth]` (bearer token from `API_TOKEN` in `.env`, see `src/Auth/ApiTokens.php`), `/health` and
 `/health/live`, `/metrics` (Prometheus), `/openapi.json` and `/docs` (OpenAPI 3.1 derived from the
 code). Middleware and endpoints are listed in `config/http.php`; remove what you do not need.
@@ -28,7 +29,8 @@ the Dockerfile, which does it at build time.
 
 Шаблон проекта на Keel. `composer create-project keel/skeleton my-app`, затем `composer serve`
 (или `composer serve:worker` для FrankenPHP worker mode) и `composer test`. Из коробки: `GET /`,
-`POST /subscribe` с валидацией и лимитом, `GET /me` под `#[Auth]` (bearer-токен из `API_TOKEN`
+`POST /subscribe` с валидацией и лимитом, `GET /hello/{name}` (страница на Twig из `templates/`),
+`GET /me` под `#[Auth]` (bearer-токен из `API_TOKEN`
 в `.env`), `/health`, `/metrics`, `/openapi.json` и `/docs`; состав — в `config/http.php`. Конфиги в `config/`, код в `src/` (находится discovery), один фронт-контроллер
 `public/index.php` для php-fpm, FrankenPHP и RoadRunner, `bin/console` с командами `keel:*`,
 тесты на `TestClient`, Dockerfile с FrankenPHP worker mode, скомпилированными кэшами и preload.

@@ -13,10 +13,13 @@ use Keel\RateLimit\Attribute\RateLimit;
 use Keel\Routing\Attribute\Get;
 use Keel\Routing\Attribute\Post;
 use Keel\Routing\Attribute\Status;
+use Keel\View\ViewRenderer;
 
 #[Operation(tags: ['Home'])]
 final class HomeController
 {
+    public function __construct(private readonly ViewRenderer $views) {}
+
     /** @return array<string, string> */
     #[Get('/', name: 'home')]
     #[Operation(summary: 'Hello')]
@@ -32,6 +35,13 @@ final class HomeController
     public function subscribe(#[FromBody] Subscribe $command): Subscribe
     {
         return $command;
+    }
+
+    #[Get('/hello/{name}')]
+    #[Operation(summary: 'HTML page rendered with Twig')]
+    public function hello(string $name): string
+    {
+        return $this->views->render('hello.twig', ['name' => $name]);
     }
 
     /** @return array<string, mixed> */
